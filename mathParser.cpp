@@ -1,14 +1,3 @@
-//--------------------------------------------------
-//Идея: https://www.youtube.com/watch?v=Vk-tGND2bfc%D1%84 
-//Примечание: за основу взял пример из этого видео; но реализация полностью моя;
-//Также, из функционала, добавил унарный минус и плавающую точку.
-//--------------------------------------------------
-//Цель пользователя: испытать алгоритм на ошибки компилятора, вылеты или неправильные ответы
-//--------------------------------------------------
-//Примечание к исходному коду:
-//В местах где используються условные операторы предусмотрен экстренный выход exit();
-//для if это else exit(). для switch это default: exit().
-//--------------------------------------------------
 #include <vector>
 #include <iostream>
 #include <string>
@@ -17,6 +6,7 @@
 #include <sstream>
 using namespace std;
 
+//operations priority
 struct Weigth
 {
 	int equal = -1;
@@ -27,6 +17,8 @@ struct Weigth
 	int bktOpen = -100;
 	int bktClose = -99;
 };
+
+//check for the correspondence of the menu tab titles
 int command(string input_D)
 {
 	if (
@@ -90,14 +82,8 @@ int command(string input_D)
 	else
 		return 0;
 }
-bool fun_ierror(bool error[]) {
-	for (int i = 0; i < 13; i++) {
-		if (error[i] == 1) {
-			return 1;
-		}
-	}
-	return 0;
-}
+
+//input comparing with 14 common error patterns
 int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stack_bkt2, bool error[])
 {
 	int nonExpresionBkt = 0;
@@ -433,6 +419,17 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 		return 0;
 }
 
+//checking for the existence of an input error of one of 14 error types 
+bool fun_ierror(bool error[]) {
+	for (int i = 0; i < 13; i++) {
+		if (error[i] == 1) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+//the operation execution
 long double action(vector<char>* stack_A, long double a, long double b)
 {
 	switch (stack_A->back())
@@ -441,9 +438,11 @@ long double action(vector<char>* stack_A, long double a, long double b)
 	case '*': return a * b;
 	case '/': return a / b;
 	case '^': return pow(a, b);
-	default: exit(055); // ЭКСТРЕННЫЙ ВЫХОД
+	default: exit(055); 
 	}
 }
+
+//returning priority of operation in top of the stack operations 
 int getAction2(vector<char>* stack_A, Weigth weigth)
 {
 	switch (stack_A->back())
@@ -453,9 +452,11 @@ int getAction2(vector<char>* stack_A, Weigth weigth)
 	case '/': return weigth.dev;
 	case '^': return weigth.step;
 	case '(': return weigth.bktOpen;
-	default: exit(070); // ЭКСТРЕННЫЙ ВЫХОД
+	default: exit(070); 
 	}
 }
+
+//returning priority of next operation in the input
 int getAction1(vector<char>* stack_A, string input_D, unsigned int i, Weigth weigth)
 {
 	switch (input_D[i])
@@ -466,17 +467,21 @@ int getAction1(vector<char>* stack_A, string input_D, unsigned int i, Weigth wei
 	case '^': return weigth.step;
 	case ')': return weigth.bktClose;
 	case '=': return weigth.equal;
-	default: exit(0104); // ЭКСТРЕННЫЙ ВЫХОД
+	default: exit(0104);
 	}
 }
+
+//
 void count(vector<long double>* stack_N, vector<char>* stack_A, string input_D, unsigned int i, Weigth weigth, long double a, long double b, bool q)
 {
 	for (bool iter = 1; iter != 0; )
 	{
+		//if the next operation has a higher priority than the previous one, then add this operation to the operation stack
 		if (stack_A->size() == 0 || getAction1(stack_A, input_D, i, weigth) > getAction2(stack_A, weigth))
 		{
 			stack_A->push_back(input_D[i]); iter = 0;
 		}
+		//otherwise, execute the last operation in the operation stack
 		else if
 			(
 				getAction1(stack_A, input_D, i, weigth) < getAction2(stack_A, weigth) ||
@@ -500,10 +505,11 @@ void count(vector<long double>* stack_N, vector<char>* stack_A, string input_D, 
 			stack_A->pop_back();
 		}
 		else
-			exit(0104); // ЭКСТРЕННЫЙ ВЫХОД
+			exit(0104); 
 	}
 }
 
+//conversion of two or more sequential digits into two-digit or larger numbers
 long double rangeUP(vector<long double>* range, int j, int k)
 {
 	long double sum = 0;
@@ -543,7 +549,7 @@ void getRange(vector<long double>* stack_N, vector<long double>* range, int j, i
 		stack_N->push_back(a + (pow(-1, m) * rangeUP(range, j, k)));
 	}
 	else
-		exit(0112); // ЭКСТРЕННЫЙ ВЫХОД
+		exit(0112); 
 }
 void stepByResult(vector<long double>* range, int* j, int* k, int* m, vector<long double>* stack_N, vector<char>* stack_A, string input_D, unsigned int i, Weigth weigth, long double a, long double b, bool q)
 {
@@ -652,7 +658,7 @@ int main()
 				q = 1;
 				printf("||%-93s||\n", "result steps turned on");
 				continue;
-			default: exit(0111); // ЭКСТРЕННЫЙ ВЫХОД
+			default: exit(0111); // ГќГЉГ‘Г’ГђГ…ГЌГЌГ›Г‰ Г‚Г›Г•ГЋГ„
 			}
 		}
 		if (areTreatedUnccorect(input_D, stack_bkt, stack_bkt2, error))
@@ -722,7 +728,7 @@ int main()
 				stack_A.push_back('(');
 				break;
 			case '=': stepByResult(&range, &j, &k, &m, &stack_N, &stack_A, input_D, i, weigth, a, b, q); break;
-			default: exit(0557); // ЭКСТРЕННЫЙ ВЫХОД
+			default: exit(0557); // ГќГЉГ‘Г’ГђГ…ГЌГЌГ›Г‰ Г‚Г›Г•ГЋГ„
 			}
 		}
 		if (stack_A.back() == '=')
@@ -734,7 +740,7 @@ int main()
 			length.str("");
 		}
 		else
-			exit(0565); // ЭКСТРЕННЫЙ ВЫХОД
+			exit(0565); // ГќГЉГ‘Г’ГђГ…ГЌГЌГ›Г‰ Г‚Г›Г•ГЋГ„
 	}
 	return 0;
 }
