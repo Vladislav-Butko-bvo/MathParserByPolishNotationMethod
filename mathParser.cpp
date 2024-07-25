@@ -69,7 +69,7 @@ int command(string input_D)
 			input_D[1] == '-'
 			)
 	{
-		return 5;
+		return 5;	//hide the steps of solving a mathematical expression
 	}
 	else if
 		(
@@ -77,7 +77,7 @@ int command(string input_D)
 			input_D[1] == '+'
 			)
 	{
-		return 6;
+		return 6;	//show the steps of solving a mathematical expression
 	}
 	else
 		return 0;	//no such menu tab exists
@@ -529,17 +529,17 @@ long double rangeUP(vector<long double>* range, int j, int k)
 
 void getRange(vector<long double>* stack_N, vector<long double>* range, int j, int k, int m)
 {
-	while (range->size() != 0)
+	while (range->size() != 0)	//removing all elements of the vector "range"
 	{
 		range->pop_back();
 	}
-	for (int i = 0; i < j; i++)
+	for (int i = 0; i < j; i++)	//digits before decimal dot are copied from "stack_N" array to "range" array
 	{
 		range->push_back(NULL);
 		range->back() = stack_N->back();
 		stack_N->pop_back();
 	}
-	if (k == 0)
+	if (k == 0)	//if input number is without decimal dot (integer number)
 		stack_N->push_back(pow(-1, m) * rangeUP(range, j, k));
 	else if (k > 0)
 	{
@@ -562,18 +562,18 @@ void stepByResult(vector<long double>* range, int* j, int* k, int* m, vector<lon
 int main()
 {
 	Weigth weigth;
-	int j;
-	int k;
-	int m;
+	int j;		//counting the number of digits before decimal dot
+	int k;		//incremented if decimal dot occurs
+	int m;		//incremented if minus symbol occurs		
 	int n;
-	bool q = 0; 	//is responsible for enabling/disabling the steps of solving a mathematical expression
-	bool error[13];
-	vector<long double> range;
-	vector<long double> stack_N;
-	vector<char> stack_A;
+	bool q = 0; 			//is responsible for enabling/disabling the steps of solving a mathematical expression
+	bool error[13];			//an array consisting of binary values ​​indicating the presence of a certain type of syntax error of entered mathematical expression   
+	vector<long double> range; 	//an array of digits separated by mathematical signs (from these digits decimal numbers of the corresponding bit rate are formed)
+	vector<long double> stack_N;	//stack of numbers
+	vector<char> stack_A;		//stack of operations
 	vector<char> stack_bkt;
 	vector<int> stack_bkt2;
-	string input_D;
+	string input_D;			//user input
 	cout << setprecision(14);
 	printf("||%-93s||\n", "__________________________Are welcome to parser of math expressions!_________________________");
 	printf("||%-93s||\n", "-------------------------------------------PASSPORT------------------------------------------");
@@ -590,8 +590,10 @@ int main()
 	printf("||%-93s||\n", "                   | %faq   (to view common quetions)");
 	printf("||%-93s||\n", "default            | %-     (turn off result steps)");
 	printf("||%-93s||\n", "                   | %+     (turn on result steps)");
-	for (bool iter = 1; iter != 0; )
+	
+	for (bool iter = 1; iter != 0; )	//user input in cycle (input new math ex. or menu tab title with symbol '%')
 	{
+		//clearing variables and vectors at the beginning of a new iteration
 		j = 0;
 		k = 0;
 		m = 0;
@@ -604,6 +606,7 @@ int main()
 			stack_N.pop_back();
 		for (unsigned int i = 0; i < stack_A.size(); i++)
 			stack_A.pop_back();
+		
 		ostringstream length;
 		length << iter;
 		printf("||%-93s||\n", "---------------------------------------------------------------------------------------------");
@@ -613,10 +616,10 @@ int main()
 		{
 			switch (command(input_D))	//comparing the input with the names of the menu title tabs existing in the program
 			{
-			case 0:
-				printf("||%-93s||\n", "ERROR_0: command undefined"); continue;
+			case 0:				//displaying a message about an error in writing the name of the menu tab and giving the user a try to enter the name again
+				printf("||%-93s||\n", "ERROR_0: command undefined"); continue;	
 			case 1:
-				iter = 0; continue;
+				iter = 0; continue; 	//terminate the programm
 			case 2:
 				printf("||%-93s||\n", "-----------------------------ABOUT OF SOURCE CODE AND ALGORITM-------------------------------");
 				printf("||%-93s||\n", "Idea: https://www.youtube.com/watch?v=Vk-tGND2bfc%D1%84");
@@ -650,27 +653,31 @@ int main()
 				printf("||%-93s||\n", "   0.99999999999999 or 0.0099999999999999 or 9999999.9999999 or 99999999999999 or");
 				printf("||%-93s||\n", "   overfloved num will be imaged as exponential notation or with rounding.");
 				continue;
-			case 5:
+			case 5:		//displaying a message about turning on the display mode of the steps of executing a mathematical expression
 				q = 0;
 				printf("||%-93s||\n", "result steps turned off");
 				continue;
-			case 6:
+			case 6:		//displaying a message about turning off the display mode of the steps of executing a mathematical expression
 				q = 1;
 				printf("||%-93s||\n", "result steps turned on");
 				continue;
 			default: exit(0111); 
 			}
 		}
-		if (areTreatedUnccorect(input_D, stack_bkt, stack_bkt2, error))
-			continue;
-		for (unsigned int i = 0; i < input_D.length(); i++)
+		
+		if (areTreatedUnccorect(input_D, stack_bkt, stack_bkt2, error))	
+			continue;	//if a mathematical expression has syntax errors, 
+					//then a message about an input error is displayed 
+					//and a try to enter the math ex. again is given
+		
+		for (unsigned int i = 0; i < input_D.length(); i++) //if there are no input errors, character-by-character parsing of the mathematical expression is performed
 		{
 			long double a = 0;
 			long double b = 0;
 			switch (input_D[i])
 			{
 			case '.':
-				if (j > 0)
+				if (j > 0)	//if there are a digits before decimal dot
 					getRange(&stack_N, &range, j, k, m);
 				j = 0; k = 1;
 				break;
@@ -728,7 +735,7 @@ int main()
 				stack_A.push_back('(');
 				break;
 			case '=': stepByResult(&range, &j, &k, &m, &stack_N, &stack_A, input_D, i, weigth, a, b, q); break;
-			default: exit(0557); // ÝÊÑÒÐÅÍÍÛÉ ÂÛÕÎÄ
+			default: exit(0557); 
 			}
 		}
 		if (stack_A.back() == '=')
@@ -740,7 +747,7 @@ int main()
 			length.str("");
 		}
 		else
-			exit(0565); // ÝÊÑÒÐÅÍÍÛÉ ÂÛÕÎÄ
+			exit(0565);
 	}
 	return 0;
 }
