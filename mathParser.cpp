@@ -539,9 +539,11 @@ void getRange(vector<long double>* stack_N, vector<long double>* range, int j, i
 		range->back() = stack_N->back();
 		stack_N->pop_back();
 	}
-	if (k == 0)	//if input number is without decimal dot (integer number)
+	
+	if (k == 0){	//if input number is without decimal dot (integer number)
 		stack_N->push_back(pow(-1, m) * rangeUP(range, j, k));
-	else if (k > 0)
+	}
+	else if (k > 0)	//number before the operation is real
 	{
 		long double a;
 		a = stack_N->back();
@@ -551,9 +553,11 @@ void getRange(vector<long double>* stack_N, vector<long double>* range, int j, i
 	else
 		exit(0112); 
 }
+
+//this function is called after encountering the symbol: '+', '-', '*', '/', '^', ')' and '=' while parsing
 void stepByResult(vector<long double>* range, int* j, int* k, int* m, vector<long double>* stack_N, vector<char>* stack_A, string input_D, unsigned int i, Weigth weigth, long double a, long double b, bool q)
 {
-	if (*j > 0)
+	if (*j > 0)	//if the previous number before the operation is real (with decimal dot)
 		getRange(*&stack_N, range, *j, *k, *m);
 	*j = 0; *k = 0; *m = 0;
 	count(*&stack_N, *&stack_A, input_D, i, weigth, a, b, q);
@@ -693,7 +697,7 @@ int main()
 			case '9': stack_N.push_back(9); j++; break;
 			case '+': stepByResult(&range, &j, &k, &m, &stack_N, &stack_A, input_D, i, weigth, a, b, q); break;
 			case '-':
-				if (i != 0)
+				if (i != 0)	//not the first character is parsed
 				{
 					if
 						(
