@@ -18,7 +18,7 @@ struct Weigth
 	int bktClose = -99;
 };
 
-//check for the correspondence of the menu tab titles
+//comparing the input with the names of the menu title tabs existing in the program
 int command(string input_D)
 {
 	if (
@@ -28,7 +28,7 @@ int command(string input_D)
 		input_D[3] == 'd'
 		)
 	{
-		return 1;
+		return 1;	//terminate the program
 	}
 	else if
 		(
@@ -80,7 +80,7 @@ int command(string input_D)
 		return 6;
 	}
 	else
-		return 0;
+		return 0;	//no such menu tab exists
 }
 
 //input comparing with 14 common error patterns
@@ -471,7 +471,7 @@ int getAction1(vector<char>* stack_A, string input_D, unsigned int i, Weigth wei
 	}
 }
 
-//
+//the last operation in the operation stack is executed or a new operation is added to this stack
 void count(vector<long double>* stack_N, vector<char>* stack_A, string input_D, unsigned int i, Weigth weigth, long double a, long double b, bool q)
 {
 	for (bool iter = 1; iter != 0; )
@@ -566,7 +566,7 @@ int main()
 	int k;
 	int m;
 	int n;
-	bool q = 0;
+	bool q = 0; 	//is responsible for enabling/disabling the steps of solving a mathematical expression
 	bool error[13];
 	vector<long double> range;
 	vector<long double> stack_N;
@@ -609,9 +609,9 @@ int main()
 		printf("||%-93s||\n", "---------------------------------------------------------------------------------------------");
 		printf("||>");
 		getline(cin, input_D);
-		if (input_D[0] == '%')
+		if (input_D[0] == '%')		//the % sign means that the user is selecting a menu tab in the console interface 
 		{
-			switch (command(input_D))
+			switch (command(input_D))	//comparing the input with the names of the menu title tabs existing in the program
 			{
 			case 0:
 				printf("||%-93s||\n", "ERROR_0: command undefined"); continue;
@@ -658,7 +658,7 @@ int main()
 				q = 1;
 				printf("||%-93s||\n", "result steps turned on");
 				continue;
-			default: exit(0111); // ÝÊÑÒÐÅÍÍÛÉ ÂÛÕÎÄ
+			default: exit(0111); 
 			}
 		}
 		if (areTreatedUnccorect(input_D, stack_bkt, stack_bkt2, error))
