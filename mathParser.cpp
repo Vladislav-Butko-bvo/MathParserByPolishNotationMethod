@@ -310,10 +310,14 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				h = 0;
 			}
 		}
-		
+
+		//if bracket symbol was encountered, then add it in stack of brackets
 		if (input_D[i] == '(' || input_D[i] == ')')
-			stack_bkt.push_back(input_D[i]);
-		
+			stack_bkt.push_back(input_D[i]);	
+
+		//if bracket symbol was encountered, then add position number in "input_D" string of it to stack of brackets №2.
+		//This position number corresponds certain bracket in "input_D" string. 
+		//Moreover, if the bracket is closing, then the position number is multiplied by -1.
 		if (input_D[i] == '(')
 			stack_bkt2.push_back(+i);
 		else if (input_D[i] == ')')
@@ -628,8 +632,8 @@ int main()
 	vector<long double> range; 	//an array of digits separated by mathematical signs (from these digits decimal numbers of the corresponding bit rate are formed)
 	vector<long double> stack_N;	//stack of numbers
 	vector<char> stack_A;		//stack of operations
-	vector<char> stack_bkt;
-	vector<int> stack_bkt2;
+	vector<char> stack_bkt;		//brackets symbols are kept in order of encountering in a mathematical expression in left-to-right direction
+	vector<int> stack_bkt2;		//position numbers corresponding brackets in "input_D" string are kept. Moreover, if the bracket is closing, then the position number is multiplied by -1
 	string input_D;			//user input
 	cout << setprecision(14);
 	printf("||%-93s||\n", "__________________________Are welcome to parser of math expressions!_________________________");
