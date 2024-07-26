@@ -88,7 +88,19 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 {
 	int nonExpresionBkt = 0;
 	int BktON = 0;
-	int a = 0, b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, h = 0, v = 0, w = 0;	//counters for identification certaint type of invalid input 
+
+	//counters for identification certaint type of invalid input 
+	int a = 0,  	//need for identification the sequence of operations symbols
+	b = 0, 		//need for identification excistence of operations symbols in math ex.
+	c = 0, 		
+	d = 0, 		//counter is increases if in math ex. encounters any digit symbol
+	e = 0, 		//counter is increases if in math ex. encounters '0' symbol
+	f = 0, 
+	g = 0, 
+	h = 0, 		 //counter is increases if in math ex. encounters '.' symbol
+	v = 0, 
+	w = 0;	
+
 	for (	//all types of invalid input are detected (the entire input string is checked)
 		unsigned int i = 0;
 		i < input_D.length(); i++
@@ -160,7 +172,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				input_D[i] == '^'
 				)
 			{
-				a++;
+				a++;	//need for identification the sequence of operations symbols
 				if (a > 1)
 					error[4] = true;
 			}
@@ -178,7 +190,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 					input_D[i] == '^'
 					)
 			{
-				b++;
+				b++;	//need for identification excistence of operations symbols in math ex.
 			}
 			else
 			{
@@ -256,22 +268,25 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 					input_D[i] == '9'
 					)
 			{
-				//if the number starts with zero, then the input is incorrect
+				//if the number consists with more than one digits, then it mastn't starts with zero. 
+				//For example, "1+01=" is invalid input
 				if (h == 0 && 	//if previously wasn't '.' symbol
 				    e > 0 && 	//was '0' symbol
 				    d == 0)	//was any digit symbol 
 					error[9] = true;
-				d++;
+				d++;	//counter is increases if in math ex. encounters any digit symbol
 			}
 			else if (input_D[i] == '0')
 			{
-				e++;
+				e++;	//counter is increases if in math ex. encounters '0' symbol
+				//if the number consists with more than one digits, then all this digits mastn't be zero.
+				//For example, "1+00=" is invalid input
 				if (h == 0 && e > 1 && d == 0)
 					error[9] = true;
 			}
 			else if (input_D[i] == '.')
 			{
-				h++;
+				h++;	//counter is increases if in math ex. encounters '.' symbol
 				if (d == 0 && e == 0)
 					error[13] = true;
 				else if (h > 1)
