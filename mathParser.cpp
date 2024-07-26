@@ -256,7 +256,10 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 					input_D[i] == '9'
 					)
 			{
-				if (h == 0 && e > 0 && d == 0)
+				//if the number starts with zero, then the input is incorrect
+				if (h == 0 && 	//if previously wasn't '.' symbol
+				    e > 0 && 	//was '0' symbol
+				    d == 0)	//was any digit symbol 
 					error[9] = true;
 				d++;
 			}
