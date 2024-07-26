@@ -88,14 +88,15 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 {
 	int nonExpresionBkt = 0;
 	int BktON = 0;
-	int a = 0, b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, h = 0, v = 0, w = 0;
-	for
-		(
-			unsigned int i = 0;
-			i < input_D.length(); i++
-			)
-	{
-		if (error[0] == false)
+	int a = 0, b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, h = 0, v = 0, w = 0;	//counters for identification certaint type of invalid input 
+	for (	//all types of invalid input are detected (the entire input string is checked)
+		unsigned int i = 0;
+		i < input_D.length(); i++
+	)
+	{	
+			//if an invalid input of this type has already been found in previous cycles, 
+			//then do not check for the existence of an invalid input of this type again
+		if (error[0] == false)	
 		{
 			if
 				(
