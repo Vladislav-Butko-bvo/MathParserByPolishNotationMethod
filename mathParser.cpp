@@ -13,8 +13,8 @@ struct Weigth
 	int sum = 1;		//addition
 	int mult = 2;		//multiply
 	int dev = 2;		//division
-	int step = 3;		//raising to a power
-	int bktOpen = -100;	//opening bracket
+	int step = 3;		//raising to a power (highest priority)
+	int bktOpen = -100;	//opening bracket (lowest priority)
 	int bktClose = -99;	//closing bracket
 };
 
@@ -86,8 +86,8 @@ int command(string input_D)
 //input comparing with 14 common error patterns
 int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stack_bkt2, bool error[])
 {
-	int nonExpresionBkt = 0;
-	bool BktON = 0;	//the presence of parentheses in a mathematical expression
+	bool nonExpresionBkt = false;	//indicates that there is some symbols between the brackets
+	bool BktON = false;		//the presence of parentheses in a mathematical expression
 
 	//counters for identification certaint type of invalid input 
 	int a = 0,  	//need for identification the sequence of operations symbols
@@ -347,21 +347,21 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				int stack_bkt_end = 0;
 				int stack_bkt_start = 0;
 
-				if (stack_bkt2[j] < 0 && j != 0)
+				if (j != 0 &&
+				    stack_bkt2[j] < 0) 	//a bracket is closing
 				{
-					stack_bkt_end = (stack_bkt2[j] * -1) - 1;
-					stack_bkt_start = stack_bkt2[j - 1] + 1;
-					stack_bkt2.erase(stack_bkt2.begin() + j);
-					stack_bkt2.erase(stack_bkt2.begin() + j - 1);
+					stack_bkt_end = (stack_bkt2[j] * -1) - 1;	//position before opening bracket position
+					stack_bkt_start = stack_bkt2[j - 1] + 1;	//position after closing bracket position 
+					stack_bkt2.erase(stack_bkt2.begin() + j);	//removal stack element of closing bracket position
+					stack_bkt2.erase(stack_bkt2.begin() + j - 1);	//removal stack element of opening bracket position
 					j = 0;
-					int b2 = 0;
-					for
-						(
-							int i2 = stack_bkt_start;
-							i2 <= stack_bkt_end; i2++
-							)
+					int b2 = 0;	//counter of operators between parentheses
+					
+					//parsing internal content between parentheses
+					for (int i2 = stack_bkt_start;
+					     i2 <= stack_bkt_end; i2++)	
 					{
-						nonExpresionBkt = 1;
+						nonExpresionBkt = true;	//indicates that there is some symbols between the brackets
 						if
 							(
 								input_D[i2] == '+' ||
@@ -371,12 +371,18 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 								input_D[i2] == '^'
 								)
 						{
-							b2++;
+							b2++;	//counter of operators between parentheses
 						}
-						if (error[5] == false && i2 == stack_bkt_end && b2 == 0)
+
+						//between parentheses must be minimum one operator
+						if (error[5] == false && 
+						    i2 == stack_bkt_end && 	
+						    b2 == 0)	//true, if between parentheses does not have operators
 						{
 							error[5] = true;
 						}
+
+						//first symbol after opening bracket mustn't be operator 
 						if (error[6] == false && i2 == stack_bkt_start)
 						{
 							if
@@ -390,6 +396,8 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 								error[6] = true;
 							}
 						}
+
+						//symbol before closing bracket mustn't be operator
 						if (error[7] == false)
 						{
 							if (i2 == stack_bkt_end)
@@ -411,6 +419,8 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				}
 			}
 		}
+
+		//before opening bracket (what isn't first symbol) must be only certain symbols 
 		if (error[12] == false && error[10] == false && i != 0 && input_D[i] == '(')
 		{
 			if
@@ -429,6 +439,8 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				error[12] = true;
 			}
 		}
+
+		//after closing bracket (what isn't last symbol before symbol '=') must be only certain symbols
 		if (error[12] == false && error[10] == false && i != 0 && i + 2 != input_D.length() && input_D[i] == ')')
 		{
 			if
@@ -448,15 +460,20 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 			}
 		}
 	}
+
+	//input mustn't be empty
 	if (input_D.length())
 	{
 	}
 	else
 		error[8] = true;
-	if (BktON == true && error[10] == false && nonExpresionBkt == 0)
+
+	//mustn't be empty brackets
+	if (BktON == true && error[10] == false && nonExpresionBkt == false)
 	{
 		error[8] = true;
 	}
+	
 	if (fun_ierror(error)) {
 		printf("||%-93s||\n", "ERROR_input: please, review \"Correct input istance\" and repeat");
 		return 1;
@@ -624,7 +641,7 @@ void stepByResult(vector<long double>* range, int* j, int* k, int* m, vector<lon
 
 int main()
 {
-	Weigth weigth;
+	Weigth weigth;  //structure of priorities of operations
 	int j;		//counting the number of digits before decimal dot
 	int k;		//incremented if decimal dot occurs
 	int m;		//incremented if minus symbol occurs		
