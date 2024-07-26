@@ -93,7 +93,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 	int a = 0,  	//need for identification the sequence of operations symbols
 	b = 0, 		//need for identification excistence of operations symbols in math ex.
 	c = 0, 		
-	d = 0, 		//counter is increases if in math ex. encounters any digit symbol
+	d = 0, 		//counter is increases if in math ex. encounters any digit symbol with the exception of '0'
 	e = 0, 		//counter is increases if in math ex. encounters '0' symbol
 	f = 0, 
 	g = 0, 
@@ -272,9 +272,9 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				//For example, "1+01=" is invalid input
 				if (h == 0 && 	//if previously wasn't '.' symbol
 				    e > 0 && 	//was '0' symbol
-				    d == 0)	//was any digit symbol 
+				    d == 0)	//was any digit symbol with the exception of '0'
 					error[9] = true;
-				d++;	//counter is increases if in math ex. encounters any digit symbol
+				d++;	//counter is increases if in math ex. encounters any digit symbol with the exception of '0'
 			}
 			else if (input_D[i] == '0')
 			{
@@ -288,10 +288,10 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 			{
 				h++;	//counter is increases if in math ex. encounters '.' symbol
 				if (d == 0 && e == 0)
-					error[13] = true;
+					error[13] = true;	//any digits before decimal dot are missing
 				else if (h > 1)
-					error[13] = true;
-				else if
+					error[13] = true;	//mustn't be more than one decimal dot in sequence
+				else if				//mustn't be any symbols with the exception of numbers after decimal dot
 					(
 						input_D[i + 1] == '+' ||
 						input_D[i + 1] == '-' ||
@@ -310,12 +310,15 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				h = 0;
 			}
 		}
+		
 		if (input_D[i] == '(' || input_D[i] == ')')
 			stack_bkt.push_back(input_D[i]);
+		
 		if (input_D[i] == '(')
 			stack_bkt2.push_back(+i);
 		else if (input_D[i] == ')')
 			stack_bkt2.push_back(i * -1);
+		
 		if (error[10] == false && i + 1 == input_D.length())
 		{
 			for (unsigned int j = 0; j < stack_bkt.size(); j++)
