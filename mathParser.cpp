@@ -514,12 +514,16 @@ long double rangeUP(vector<long double>* range, int j, int k)
 {
 	long double sum = 0;
 	long double mult = 1;
-	for (int i = 0; i < j; i++)
+		//a sequence of digits is converted into an integer. 
+		//This sequence can be an integer in a mathematical expression or a part of a real (before/after decimal dot)
+	for (int i = 0; i < j; i++)	
 	{
 		sum += (*range)[i] * mult;
 		mult *= 10;
 	}
-	if (k > 0)
+		//if converted integer is part of real number after decimal dot, 
+		//then it is divided by 10 as many times as there are digits in the converted integer
+	if (k > 0)	
 	{
 		for (int i = 0; i < j; i++)
 			sum /= 10.0;
@@ -541,12 +545,17 @@ void getRange(vector<long double>* stack_N, vector<long double>* range, int j, i
 	}
 	
 	if (k == 0){	//if input number is without decimal dot (integer number)
-		stack_N->push_back(pow(-1, m) * rangeUP(range, j, k));
+		stack_N->push_back(
+			pow(-1, m) * 		//-1^m, m –  is the amount of minuses before the number,
+			rangeUP(range, j, k));	//converts a sequence of digit-characters to a number
+		//Example:
+		//if the string -(-22) is encountered, then the action is performed: -1^2 = 1 * (2*10 + 2) = 22
+		//if the string -22 is encountered, then the action is performed: -1^1 = -1 * (2*10 + 2) = -22
 	}
 	else if (k > 0)	//number before the operation is real
 	{
 		long double a;
-		a = stack_N->back();
+		a = stack_N->back();	//integer number before decimal dot 
 		stack_N->pop_back();
 		stack_N->push_back(a + (pow(-1, m) * rangeUP(range, j, k)));
 	}
@@ -559,7 +568,7 @@ void stepByResult(vector<long double>* range, int* j, int* k, int* m, vector<lon
 {
 	if (*j > 0)	//if the previous number before the operation is real (with decimal dot)
 		getRange(*&stack_N, range, *j, *k, *m);
-	*j = 0; *k = 0; *m = 0;
+	*j = 0; *k = 0; *m = 0;	//after each operation, the counter of the amount of digits before decimal dot of the last real number, decimal dots, minuses symbols is reset
 	count(*&stack_N, *&stack_A, input_D, i, weigth, a, b, q);
 }
 
@@ -569,7 +578,7 @@ int main()
 	int j;		//counting the number of digits before decimal dot
 	int k;		//incremented if decimal dot occurs
 	int m;		//incremented if minus symbol occurs		
-	int n;
+	int n;		//counter of the amount of nested mathematical expressions (opening brackets)
 	bool q = 0; 			//is responsible for enabling/disabling the steps of solving a mathematical expression
 	bool error[13];			//an array consisting of binary values ​​indicating the presence of a certain type of syntax error of entered mathematical expression   
 	vector<long double> range; 	//an array of digits separated by mathematical signs (from these digits decimal numbers of the corresponding bit rate are formed)
@@ -714,7 +723,7 @@ int main()
 							input_D[i - 1] == ')'
 							)
 					{
-						input_D[i] = '+';
+						input_D[i] = '+';	//the subtraction operation is replaced by the addition operation of a negative number
 						stepByResult(&range, &j, &k, &m, &stack_N, &stack_A, input_D, i, weigth, a, b, q);
 					}
 				}
