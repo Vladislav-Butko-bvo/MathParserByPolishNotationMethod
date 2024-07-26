@@ -635,7 +635,7 @@ int main()
 	printf("||%-93s||\n", "Input errors are blocked and displayed.");
 	printf("||%-93s||\n", "Functionals: 1) actions as +,-,*,/,^; 2) brackets; 3) nested brackets;");
 	printf("||%-93s||\n", "4) floating point numbers; 5) unary minus.");
-	printf("||%-93s||\n", "Correct input instance:1+2-3*4/5^6+(66+115)+((2+2)*2)+1.2-0.033+(-2)+(-2+2)="); // Result:191.166232 
+	printf("||%-93s||\n", "Correct input instance:1+2-3*4/5^6+(66+115)+(-(2+2)*2)+1.2-0.033+(-2)+(-2+2)="); // Result:175.166232 
 	printf("||%-93s||\n", "Difined commands:");
 	printf("||%-93s||\n", "status             | command");
 	printf("||%-93s||\n", "                   | %end   (to complete programm)");
