@@ -9,13 +9,13 @@ using namespace std;
 //operations priority
 struct Weigth
 {
-	int equal = -1;
-	int sum = 1;
-	int mult = 2;
-	int dev = 2;
-	int step = 3;
-	int bktOpen = -100;
-	int bktClose = -99;
+	int equal = -1;		//equality symbol
+	int sum = 1;		//addition
+	int mult = 2;		//multiply
+	int dev = 2;		//division
+	int step = 3;		//raising to a power
+	int bktOpen = -100;	//opening bracket
+	int bktClose = -99;	//closing bracket
 };
 
 //comparing the input with the names of the menu title tabs existing in the program
@@ -474,7 +474,7 @@ int getAction1(vector<char>* stack_A, string input_D, unsigned int i, Weigth wei
 //the last operation in the operation stack is executed or a new operation is added to this stack
 void count(vector<long double>* stack_N, vector<char>* stack_A, string input_D, unsigned int i, Weigth weigth, long double a, long double b, bool q)
 {
-	for (bool iter = 1; iter != 0; )
+	for (bool iter = 1; iter != 0; )	
 	{
 		//if the next operation has a higher priority than the previous one, then add this operation to the operation stack
 		if (stack_A->size() == 0 || getAction1(stack_A, input_D, i, weigth) > getAction2(stack_A, weigth))
@@ -488,19 +488,23 @@ void count(vector<long double>* stack_N, vector<char>* stack_A, string input_D, 
 				getAction1(stack_A, input_D, i, weigth) == getAction2(stack_A, weigth)
 				)
 		{
-			b = stack_N->back();
+			b = stack_N->back();	//second operand (all operations are two-operand, subtraction is representation of addition a negative number)
 			stack_N->pop_back();
-			a = stack_N->back();
+			a = stack_N->back();	//first operand
 			stack_N->pop_back();
-			stack_N->push_back(action(stack_A, a, b));
+			stack_N->push_back(action(stack_A, a, b));	//execution of the operation
+			
 			ostringstream length;
 			length.precision(14);
 			length << a << stack_A->back() << b << stack_N->back();
-			if (q)
+
+			//if steps of execution of math. ex. are displaying 
+			if (q)	
 				if (input_D[i] == ')')
 					cout << "||" << '(' << a << stack_A->back() << b << ')' << '=' << stack_N->back() << right << setw(95 - 3 - length.str().size()) << "||" << setw(0) << left << '\n';
 				else
 					cout << "||" << a << stack_A->back() << b << '=' << stack_N->back() << right << setw(95 - 1 - length.str().size()) << "||" << setw(0) << left << '\n';
+			
 			length.str("");
 			stack_A->pop_back();
 		}
@@ -578,7 +582,7 @@ int main()
 	int j;		//counting the number of digits before decimal dot
 	int k;		//incremented if decimal dot occurs
 	int m;		//incremented if minus symbol occurs		
-	int n;		//counter of the amount of nested mathematical expressions (opening brackets)
+	int n;		//is used to multiply the mathematical expression between the brackets by minus 1, if the brackets was preceded by a minus
 	bool q = 0; 			//is responsible for enabling/disabling the steps of solving a mathematical expression
 	bool error[13];			//an array consisting of binary values ​​indicating the presence of a certain type of syntax error of entered mathematical expression   
 	vector<long double> range; 	//an array of digits separated by mathematical signs (from these digits decimal numbers of the corresponding bit rate are formed)
@@ -735,13 +739,13 @@ int main()
 				j++;
 				stack_A.pop_back();
 				stack_A.pop_back();
-				if (n > 0)
+				if (n > 0)	//is used to multiply the mathematical expression between the brackets by minus 1, if the brackets was preceded by a minus
 				{
 					m = 1; n--;
 				}
 				break;
 			case '(':
-				if (m > 0)
+				if (m > 0)	//if the previous symbol was a minus
 				{
 					m = 0; n++;
 				}
