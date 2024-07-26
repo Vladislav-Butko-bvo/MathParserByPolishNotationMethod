@@ -87,7 +87,7 @@ int command(string input_D)
 int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stack_bkt2, bool error[])
 {
 	int nonExpresionBkt = 0;
-	int BktON = 0;
+	bool BktON = 0;	//the presence of parentheses in a mathematical expression
 
 	//counters for identification certaint type of invalid input 
 	int a = 0,  	//need for identification the sequence of operations symbols
@@ -322,13 +322,14 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 			stack_bkt2.push_back(+i);
 		else if (input_D[i] == ')')
 			stack_bkt2.push_back(i * -1);
-		
+
+		//checking for unclosed or unopened parentheses
 		if (error[10] == false && i + 1 == input_D.length())
 		{
 			for (unsigned int j = 0; j < stack_bkt.size(); j++)
 			{
-				BktON = 1;
-				if (stack_bkt[j] == ')' && j != 0 && stack_bkt[j - 1] == '(')
+				BktON = true;
+				if (j != 0 && stack_bkt[j - 1] == '(' && stack_bkt[j] == ')')
 				{
 					stack_bkt.erase(stack_bkt.begin() + j);
 					stack_bkt.erase(stack_bkt.begin() + j - 1);
@@ -338,6 +339,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 			if (stack_bkt.size() != 0)
 				error[10] = true;
 		}
+		
 		if (error[10] == false && i + 1 == input_D.length())
 		{
 			for (unsigned int j = 0; j < stack_bkt2.size(); j++)
@@ -451,7 +453,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 	}
 	else
 		error[8] = true;
-	if (BktON == 1 && error[10] == false && nonExpresionBkt == 0)
+	if (BktON == true && error[10] == false && nonExpresionBkt == 0)
 	{
 		error[8] = true;
 	}
