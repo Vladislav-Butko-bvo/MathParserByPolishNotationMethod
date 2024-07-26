@@ -94,11 +94,11 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 		i < input_D.length(); i++
 	)
 	{	
-			//if an invalid input of this type has already been found in previous cycles, 
-			//then do not check for the existence of an invalid input of this type again
+		//if an invalid input of this type has already been found in previous cycles, 
+		//then do not check for the existence of an invalid input of this type again
 		if (error[0] == false)	
 		{
-			if
+			if	//checking for the use of permitted symbols in mathematical expression
 				(
 					input_D[i] == '.' ||
 					input_D[i] == '0' ||
@@ -120,17 +120,23 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 					input_D[i] == '(' ||
 					input_D[i] == '='
 					)
-			{
+			{	//do nothing
 			}
-			else
+			else	//invalid input detected
 			{
 				error[0] = true;
 			}
 		}
-		if (error[1] == false && input_D[i] == '=' && i + 1 != input_D.length())
+		
+		//there must be nothing after the '=' symbol
+		if (error[1] == false && 	
+		    input_D[i] == '=' && 
+		    i + 1 != input_D.length())	
 		{
 			error[1] = true;
 		}
+		
+		//a mathematical expression must have '=' symbol
 		if (error[2] == false)
 		{
 			if (input_D[i] == '=')
@@ -142,6 +148,8 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				error[2] = true;
 			}
 		}
+
+		//there must not be more than one operation symbol in a sequence
 		if (error[4] == false)
 		{
 			if (
@@ -157,6 +165,8 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 					error[4] = true;
 			}
 		}
+
+		//if the current symbol is not an operation symbol, then reset the counter 'a'
 		if (error[5] == false)
 		{
 			if
@@ -175,10 +185,14 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				a = 0;
 			}
 		}
+		
+		//a mathematical expression must contain at least one operation symbol
 		if (error[5] == false && i + 1 == input_D.length() && b == 0)
 		{
 			error[5] = true;
 		}
+
+		//a mathematical expression mustn't beginning with a operation symbol
 		if (error[6] == false && i == 0)
 		{
 			if
@@ -192,8 +206,10 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				error[6] = true;
 			}
 		}
+		
 		if (error[7] == false)
 		{
+			//a math ex. mustn't ending with operation symbol 
 			if (i + 1 == input_D.length())
 			{
 				if
@@ -208,6 +224,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 					error[7] = true;
 				}
 			}
+			//before '=' symbol mustn't be operation sumbol
 			if (i + 2 == input_D.length() && input_D[i + 1] == '=')
 			{
 				if
@@ -223,6 +240,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 				}
 			}
 		}
+
 		if (error[9] == false || error[13] == false)
 		{
 			if
