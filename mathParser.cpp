@@ -92,14 +92,10 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 	//counters for identification certaint type of invalid input 
 	int a = 0,  	//need for identification the sequence of operations symbols
 	b = 0, 		//need for identification excistence of operations symbols in math ex.
-	c = 0, 		
+	c = 0, 		//counter of '=' symbol
 	d = 0, 		//counter is increases if in math ex. encounters any digit symbol with the exception of '0'
 	e = 0, 		//counter is increases if in math ex. encounters '0' symbol
-	f = 0, 
-	g = 0, 
 	h = 0, 		 //counter is increases if in math ex. encounters '.' symbol
-	v = 0, 
-	w = 0;	
 
 	for (	//all types of invalid input are detected (the entire input string is checked)
 		unsigned int i = 0;
@@ -153,7 +149,7 @@ int areTreatedUnccorect(string input_D, vector<char> stack_bkt, vector<int> stac
 		{
 			if (input_D[i] == '=')
 			{
-				c++;
+				c++;	//counter of '=' symbol
 			}
 			else if (i + 1 == input_D.length() && c == 0)
 			{
@@ -734,11 +730,11 @@ int main()
 				printf("||%-93s||\n", "   overfloved num will be imaged as exponential notation or with rounding.");
 				continue;
 			case 5:		//displaying a message about turning on the display mode of the steps of executing a mathematical expression
-				q = 0;
+				q = 0;  //result steps turned off
 				printf("||%-93s||\n", "result steps turned off");
 				continue;
 			case 6:		//displaying a message about turning off the display mode of the steps of executing a mathematical expression
-				q = 1;
+				q = 1;  //result steps turned on
 				printf("||%-93s||\n", "result steps turned on");
 				continue;
 			default: exit(0111); 
